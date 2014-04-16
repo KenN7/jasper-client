@@ -23,10 +23,10 @@ put in config :
 class Jaspi:
     def __init__(self, lm, dic, perso_lm, perso_dic, profile):
         self.mic = mic.Mic(lm, dic, perso_lm, perso_dic)    
-        self.profile = profile
+        self.profile = yaml.safe_load(open(profile),'r')
         self.mic.say("Hello I'm Jaspi, Nice heering from you")
         self.brain = brain.Brain(self.mic, self.profile)
-        self.notifier = notifier.Notifier(profile)
+        self.notifier = notifier.Notifier(self.profile)
 
     def run(self):
         while True:

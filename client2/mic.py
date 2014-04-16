@@ -8,11 +8,10 @@ from wave import open as open_audio
 import audioop
 import pyaudio
 import logging
-import pyttsx
 
 
 class Mic:
-    def __init__(self, lmd, dictd, lmd_persona, dictd_persona, lmd_music=None, dictd_music=None):
+    def __init__(self, lmd, dictd, lmd_persona, dictd_persona):
             """
                 Initiates the pocketsphinx instance.
     
@@ -22,16 +21,16 @@ class Mic:
                 lmd_persona -- filename of the 'Persona' language model(e.g., 'Jasper')
                 dictd_persona -- filename of the 'Persona' dictionary (.dic)
             """
-            self.engine = pyttsx.init()
-            hmdir = "/usr/local/share/pocketsphinx/model/hmm/en_US/hub4wsj_sc_8k"
+            self.hmdir = "/usr/local/share/pocketsphinx/model/hmm/en_US/hub4wsj_sc_8k"
+            self.lmd = lmd
+            self.dictd = dictd
+            self.lmd_persona = lmd_persona
+            self.dictd_persona = dictd_persona
     
-            if lmd_music and dictd_music:
-                self.speechRec_music = ps.Decoder(hmm = hmdir, lm = lmd_music, dict = dictd_music)
-            self.speechRec_persona = ps.Decoder(
-                hmm=hmdir, lm=lmd_persona, dict=dictd_persona)
-            self.speechRec = ps.Decoder(hmm=hmdir, lm=lmd, dict=dictd)
-    
-    def transcribe(self, audio_file_path, PERSONA_ONLY=False, MUSIC=False):
+    def speechRec(self, lmd, dictd):
+        ps.Decoder(self.hmdir, lmd, dictd)
+
+    def transcribe(self, audio_file_path, lmd, dictd):
             """
                 Performs TTS, transcribing an audio file and returning the result.
     
@@ -44,18 +43,11 @@ class Mic:
             wavFile = file(audio_file_path, 'rb')
             wavFile.seek(44)
     
-            if MUSIC:
-                self.speechRec_music.decode_raw(wavFile)
-                result = self.speechRec_music.get_hyp()
-            elif PERSONA_ONLY:
-                self.speechRec_persona.decode_raw(wavFile)
-                result = self.speechRec_persona.get_hyp()
-            else:
-                self.speechRec.decode_raw(wavFile)
-                result = self.speechRec.get_hyp()
+            self.speechRec(lmd, dictd).decode_raw(wavFile)
+            result = self.speechRec.get_hyp()
     
             logging.info("===================")
-            logging.info("JASPER: %s" % result[0])
+            logging.info("GLADiS: %s" % result[0])
             logging.info("===================")
     
             return result[0]
@@ -149,7 +141,7 @@ class Mic:
         write_frames.close()
 
         # check if PERSONA was said
-        transcribed = self.transcribe(AUDIO_FILE, PERSONA_ONLY=True)
+        transcribed = self.transcribe(AUDIO_FILE, self.lmd_persona, self.dictd_persona)
 
         if PERSONA in transcribed:
             return (THRESHOLD, PERSONA)
@@ -171,7 +163,7 @@ class Mic:
             if not os.path.exists(AUDIO_FILE):
                 return None
 
-            return self.transcribe(AUDIO_FILE)
+            return self.transcribe(AUDIO_FILE, self.lmd, self.dictd)
 
         # check if no threshold provided
         if THRESHOLD == None:
@@ -223,10 +215,7 @@ class Mic:
         # DO SOME AMPLIFICATION
         # os.system("sox "+AUDIO_FILE+" temp.wav vol 20dB")
 
-        if MUSIC:
-            return self.transcribe(AUDIO_FILE, MUSIC=True)
-
-        return self.transcribe(AUDIO_FILE)
+        return self.transcribe(AUDIO_FILE, self.lmd, self.dictd)
 
     def getScore(self, data):
         rms = audioop.rms(data, 2)
@@ -277,19 +266,4 @@ class Mic:
         THRESHOLD = average * THRESHOLD_MULTIPLIER
 
         return THRESHOLD
-
-    def say(self, phrase):
-        self.engine.say(phrase)
-        self.engine.runAndWait()
-
-
-    def volume(self, prop)
-       volume = self.engine.getProperty('volume')
-
-       self.engine.setProperty('volume', volume+(0.25*prop))
-       if prop: 
-           self.say('Volume Up')
-       else:
-           self.say('Volume Down')
-
 
