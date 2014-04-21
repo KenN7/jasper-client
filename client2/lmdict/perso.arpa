@@ -1,0 +1,76 @@
+
+\data\
+ngram 1=22
+ngram 2=21
+ngram 3=20
+
+\1-grams:
+-1.322219	</s>
+-99	<s>	0.000000
+-1.322219	avec
+-1.322219	bonjour
+-1.322219	dans
+-1.322219	de
+-1.322219	etre
+-1.322219	je
+-1.322219	la
+-1.322219	le
+-1.322219	maintenant
+-1.322219	mais
+-1.322219	moi
+-1.322219	nous
+-1.322219	pourquoi
+-1.322219	premier
+-1.322219	quoi
+-1.322219	sur
+-1.322219	te
+-1.322219	toi
+-1.322219	travail
+-1.322219	viki
+
+\2-grams:
+-1.322219	<s> viki
+-1.322219	avec moi
+-1.322219	bonjour etre
+-1.322219	dans le
+-1.322219	de la
+-1.322219	etre maintenant
+-1.322219	je te
+-1.322219	la bonjour
+-1.322219	le sur
+-1.322219	maintenant mais
+-1.322219	mais pourquoi
+-1.322219	moi toi
+-1.322219	nous je
+-1.322219	pourquoi dans
+-1.322219	premier </s>
+-1.322219	quoi travail
+-1.322219	sur quoi
+-1.322219	te premier
+-1.322219	toi nous
+-1.322219	travail avec
+-1.322219	viki de
+
+\3-grams:
+-1.322219	<s> viki de
+-1.322219	avec moi toi
+-1.322219	bonjour etre maintenant
+-1.322219	dans le sur
+-1.322219	de la bonjour
+-1.322219	etre maintenant mais
+-1.322219	je te premier
+-1.322219	la bonjour etre
+-1.322219	le sur quoi
+-1.322219	maintenant mais pourquoi
+-1.322219	mais pourquoi dans
+-1.322219	moi toi nous
+-1.322219	nous je te
+-1.322219	pourquoi dans le
+-1.322219	quoi travail avec
+-1.322219	sur quoi travail
+-1.322219	te premier </s>
+-1.322219	toi nous je
+-1.322219	travail avec moi
+-1.322219	viki de la
+
+\end\

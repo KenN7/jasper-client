@@ -1,10 +1,11 @@
 #!/bin/python
+import logging
 
-loglevel = logging.INFO
-botname = "Jaspi"
+loglevel = logging.DEBUG
+botname = "viki"
 pardon = "Sorry, i did not get your request"
-lm = "languagemodel.lm"
-dic = "dictionary.dic"
-perso_lm = "languagemodel_persona.lm"
-perso_dic = "dictionnary_persona.dic"
+lm = "lmdict/test4.arpa"
+dic = "lmdict/test.dic"
+perso_lm = "lmdict/perso.arpa"
+perso_dic = "lmdict/perso.dict"
 profile = "profile.yml"

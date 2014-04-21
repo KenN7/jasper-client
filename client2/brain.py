@@ -20,7 +20,6 @@ class Brain(object):
         self.profile = profile
         self.modules = [
             Gmail, Notifications, Birthday, Weather, HN, News, Time, Joke, Life]
-        self.modules.append(Unclear)
 
     def query(self, text):
         """
@@ -32,11 +31,16 @@ class Brain(object):
         """
         for module in self.modules:
             if module.isValid(text):
-
+                logging.warn('module %s is valid' % module)
                 try:
                     module.handle(text, self.mic, self.profile)
+                    logging.warn('going True')
+                    return True
 
                 except Exception as e:
                     logging.error("Error in module, %s" % e)
                     self.mic.say(
                         "I'm sorry. I had some trouble with that operation. Please try again later.")
+            else:
+                continue
+        return False

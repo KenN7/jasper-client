@@ -2,6 +2,7 @@
 
 import os
 import json
+import sphinxbase
 import pocketsphinx as ps
 import wave
 from wave import open as open_audio
@@ -21,16 +22,16 @@ class Mic:
                 lmd_persona -- filename of the 'Persona' language model(e.g., 'Jasper')
                 dictd_persona -- filename of the 'Persona' dictionary (.dic)
             """
-            self.hmdir = "/usr/local/share/pocketsphinx/model/hmm/en_US/hub4wsj_sc_8k"
+            self.hmdir = "lmdict/lium_french_f0"
             self.lmd = lmd
             self.dictd = dictd
             self.lmd_persona = lmd_persona
             self.dictd_persona = dictd_persona
-    
-    def speechRec(self, lmd, dictd):
-        ps.Decoder(self.hmdir, lmd, dictd)
 
-    def transcribe(self, audio_file_path, lmd, dictd):
+            self.speechRec = ps.Decoder(hmm=self.hmdir, lm=self.lmd, dict=self.dictd)
+            self.speechRec_persona = ps.Decoder(hmm=self.hmdir, lm=self.lmd_persona, dict=self.dictd_persona)
+
+    def transcribe(self, audio_file_path, PERSONA=False):
             """
                 Performs TTS, transcribing an audio file and returning the result.
     
@@ -42,13 +43,17 @@ class Mic:
     
             wavFile = file(audio_file_path, 'rb')
             wavFile.seek(44)
+            
+            if PERSONA:
+                self.speechRec_persona.decode_raw(wavFile)
+                result = self.speechRec_persona.get_hyp()
+            else:
+                self.speechRec.decode_raw(wavFile)
+                result = self.speechRec.get_hyp()
     
-            self.speechRec(lmd, dictd).decode_raw(wavFile)
-            result = self.speechRec.get_hyp()
-    
-            logging.info("===================")
-            logging.info("GLADiS: %s" % result[0])
-            logging.info("===================")
+            logging.warn("===================")
+            logging.warn("viki: %s" % result[0])
+            logging.warn("===================")
     
             return result[0]
 
@@ -116,8 +121,8 @@ class Mic:
 
         # no use continuing if no flag raised
         if not didDetect:
-            print "No disturbance detected"
-            return
+            logging.warn("No disturbance detected")
+            return (False, None)
 
         # cutoff any recording before this disturbance was detected
         frames = frames[-20:]
@@ -141,14 +146,14 @@ class Mic:
         write_frames.close()
 
         # check if PERSONA was said
-        transcribed = self.transcribe(AUDIO_FILE, self.lmd_persona, self.dictd_persona)
+        transcribed = self.transcribe(AUDIO_FILE, True)
 
         if PERSONA in transcribed:
             return (THRESHOLD, PERSONA)
+        else:
+            return (False, transcribed)
 
-        return (False, transcribed)
-
-    def activeListen(self, THRESHOLD=None, LISTEN=True, MUSIC=False):
+    def activeListen(self, THRESHOLD=None, LISTEN=True):
         """
             Records until a second of silence or times out after 12 seconds
         """
@@ -163,13 +168,13 @@ class Mic:
             if not os.path.exists(AUDIO_FILE):
                 return None
 
-            return self.transcribe(AUDIO_FILE, self.lmd, self.dictd)
+            return self.transcribe(AUDIO_FILE)
 
         # check if no threshold provided
         if THRESHOLD == None:
             THRESHOLD = self.fetchThreshold()
 
-        os.system("aplay -D hw:1,0 beep_hi.wav")
+        os.system("aplay beep_hi.wav")
 
         # prepare recording stream
         audio = pyaudio.PyAudio()
@@ -199,7 +204,7 @@ class Mic:
             if average < THRESHOLD * 0.8:
                 break
 
-        os.system("aplay -D hw:1,0 beep_lo.wav")
+        os.system("aplay beep_lo.wav")
 
         # save the audio data
         stream.stop_stream()
@@ -215,7 +220,7 @@ class Mic:
         # DO SOME AMPLIFICATION
         # os.system("sox "+AUDIO_FILE+" temp.wav vol 20dB")
 
-        return self.transcribe(AUDIO_FILE, self.lmd, self.dictd)
+        return self.transcribe(AUDIO_FILE)
 
     def getScore(self, data):
         rms = audioop.rms(data, 2)
