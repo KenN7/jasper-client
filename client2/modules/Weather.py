@@ -36,7 +36,7 @@ def getForecast(profile):
                             + str(profile['location']))['entries']
 
 
-def handle(text, mic, profile):
+def handle(text, teller, mic, profile):
     """
         Responds to user-input, typically speech text, with a summary of
         the relevant weather for the requested date (typically, weather
@@ -44,12 +44,12 @@ def handle(text, mic, profile):
 
         Arguments:
         text -- user-input, typically transcribed speech
-        mic -- used to interact with the user (for both input and output)
+        mic -- used to interact with the user (input)
         profile -- contains information related to the user (e.g., phone number)
     """
 
     if not profile['location']:
-        mic.say(
+        teller.say(
             "I'm sorry, I can't seem to access that information. Please make sure that you've set your location on the dashboard.")
         return
 
@@ -94,9 +94,9 @@ def handle(text, mic, profile):
 
     if output:
         output = replaceAcronyms(output)
-        mic.say(output)
+        teller.say(output)
     else:
-        mic.say(
+        teller.say(
             "I'm sorry. I can't see that far ahead.")
 
 

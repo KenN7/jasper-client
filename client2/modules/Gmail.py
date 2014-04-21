@@ -83,7 +83,7 @@ def fetchUnreadEmails(profile, since=None, markRead=False, limit=None):
     return msgs
 
 
-def handle(text, mic, profile):
+def handle(text, teller, mic, profile):
     """
         Responds to user-input, typically speech text, with a summary of
         the user's Gmail inbox, reporting on the number of unread emails
@@ -91,7 +91,7 @@ def handle(text, mic, profile):
 
         Arguments:
         text -- user-input, typically transcribed speech
-        mic -- used to interact with the user (for both input and output)
+        mic -- used to interact with the user (input)
         profile -- contains information related to the user (e.g., Gmail address)
     """
     try:
@@ -99,19 +99,19 @@ def handle(text, mic, profile):
 
         if isinstance(msgs, int):
             response = "You have %d unread emails." % msgs
-            mic.say(response)
+            teller.say(response)
             return
 
         senders = [getSender(e) for e in msgs]
     except imaplib.IMAP4.error:
-        mic.say(
+        teller.say(
             "I'm sorry. I'm not authenticated to work with your Gmail.")
         return
 
     if not senders:
-        mic.say("You have no unread emails.")
+        teller.say("You have no unread emails.")
     elif len(senders) == 1:
-        mic.say("You have one unread email from " + senders[0] + ".")
+        teller.say("You have one unread email from " + senders[0] + ".")
     else:
         response = "You have %d unread emails" % len(
             senders)
@@ -123,7 +123,7 @@ def handle(text, mic, profile):
         else:
             response += " from " + unittest[0]
 
-        mic.say(response)
+        teller.say(response)
 
 
 def isValid(text):

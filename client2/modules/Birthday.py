@@ -5,14 +5,14 @@ from app_utils import getTimezone
 WORDS = ["BIRTHDAY"]
 
 
-def handle(text, mic, profile):
+def handle(text, teller, mic, profile):
     """
         Responds to user-input, typically speech text, by listing the user's
         Facebook friends with birthdays today.
 
         Arguments:
         text -- user-input, typically transcribed speech
-        mic -- used to interact with the user (for both input and output)
+        mic -- used to interact with the user (input)
         profile -- contains information related to the user (e.g., phone number)
     """
     oauth_access_token = profile['keys']["FB_TOKEN"]
@@ -23,11 +23,11 @@ def handle(text, mic, profile):
         results = graph.request(
             "me/friends", args={'fields': 'id,name,birthday'})
     except GraphAPIError:
-        mic.say(
+        teller.say(
             "I have not been authorized to query your Facebook. If you would like to check birthdays in the future, please visit the Jasper dashboard.")
         return
     except:
-        mic.say(
+        teller.say(
             "I apologize, there's a problem with that service at the moment.")
         return
 
@@ -50,7 +50,7 @@ def handle(text, mic, profile):
     else:
         output = "None of your friends have birthdays today."
 
-    mic.say(output)
+    teller.say(output)
 
 
 def isValid(text):

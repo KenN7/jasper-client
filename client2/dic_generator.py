@@ -35,5 +35,5 @@ def ngram(words, outputf):
 if __name__ == '__main__':
     words = getWords()
     logging.debug('got words %s' % words)
-    g2p(words, 'dictemp')
-    ngram(words, 'ngramtemp')
+    g2p(words, 'test')
+    ngram(words, 'test')

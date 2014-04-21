@@ -6,14 +6,14 @@ import re
 WORDS = ["sens", "de", "la", "vie"]
 
 
-def handle(text, mic, profile):
+def handle(text, teller, mic, profile):
     """
         Responds to user-input, typically speech text, by relaying the
         meaning of life.
 
         Arguments:
         text -- user-input, typically transcribed speech
-        mic -- used to interact with the user (for both input and output)
+        mic -- used to interact with the user (input)
         profile -- contains information related to the user (e.g., phone number)
     """
     messages = ["C'est 42, évidement !",
@@ -21,7 +21,7 @@ def handle(text, mic, profile):
 
     message = random.choice(messages)
 
-    mic.say(message)
+    teller.say(message)
 
 
 def isValid(text):

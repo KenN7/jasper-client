@@ -13,6 +13,9 @@ class Speak:
 #
     def say(self, phrase):
         espeak.synth(phrase)
+        while espeak.is_playing():
+            pass #wait until the bot is finished speaking before doing anything else
+
 #        self.engine.say(phrase)
 #        self.engine.runAndWait()
 #

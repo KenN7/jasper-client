@@ -17,7 +17,7 @@ class Jaspi:
         self.teller = teller
         self.profile = yaml.safe_load(open(profile,'r'))
         self.teller.say("Bonjour, je suis viki, ravis de vous revoir")
-        self.brain = brain.Brain(self.teller, self.profile)
+        self.brain = brain.Brain(self.teller, self.mic, self.profile)
         self.notifier = notifier.Notifier(self.profile)
         self.state = 0
         logging.warn("Bot started ...")

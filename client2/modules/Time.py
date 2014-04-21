@@ -6,13 +6,13 @@ from semantic.dates import DateService
 WORDS = ["HEURE"]
 
 
-def handle(text, mic, profile):
+def handle(text, teller, mic, profile):
     """
         Reports the current time based on the user's timezone.
 
         Arguments:
         text -- user-input, typically transcribed speech
-        mic -- used to interact with the user (for both input and output)
+        mic -- used to interact with the user (input)
         profile -- contains information related to the user (e.g., phone number)
     """
 
@@ -20,7 +20,7 @@ def handle(text, mic, profile):
     now = datetime.datetime.now(tz=tz)
     service = DateService()
     response = service.convertTime(now)
-    mic.say("Il est %s." % response)
+    teller.say("Il est %s." % response)
 
 
 def isValid(text):

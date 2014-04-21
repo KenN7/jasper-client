@@ -5,7 +5,7 @@ from modules import *
 
 class Brain(object):
 
-    def __init__(self, mic, profile):
+    def __init__(self, teller, mic, profile):
         """
         Instantiates a new Brain object, which cross-references user
         input with a list of modules. Note that the order of brain.modules
@@ -18,6 +18,7 @@ class Brain(object):
         """
         self.mic = mic
         self.profile = profile
+        self.teller = teller
         self.modules = [
             Gmail, Notifications, Birthday, Weather, HN, News, Time, Joke, Life]
 
@@ -33,13 +34,13 @@ class Brain(object):
             if module.isValid(text):
                 logging.warn('module %s is valid' % module)
                 try:
-                    module.handle(text, self.mic, self.profile)
+                    module.handle(text, self.teller, self.mic, self.profile)
                     logging.warn('going True')
                     return True
 
                 except Exception as e:
                     logging.error("Error in module, %s" % e)
-                    self.mic.say(
+                    self.teller.say(
                         "I'm sorry. I had some trouble with that operation. Please try again later.")
             else:
                 continue
