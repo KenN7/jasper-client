@@ -9,6 +9,7 @@ from wave import open as open_audio
 import audioop
 import pyaudio
 import logging
+import CONFIG
 
 
 class Mic:
@@ -52,7 +53,7 @@ class Mic:
                 result = self.speechRec.get_hyp()
     
             logging.warn("===================")
-            logging.warn("viki: %s" % result[0])
+            logging.warn("%s: %s" % (CONFIG.botname,result[0]))
             logging.warn("===================")
     
             return result[0]
