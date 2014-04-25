@@ -4,12 +4,12 @@ import yaml
 import sys
 import logging, logging.handlers
 
-import mic
-import say
-import brain
-import notifier
+import client2.mic
+import client2.say
+import client2.brain
+from client2.notifiersMod import notifier
 
-import CONFIG
+import client2.CONFIG
 
 class Jaspi:
     def __init__(self, lm, dic, perso_lm, perso_dic, profile, mic, teller):
@@ -18,7 +18,8 @@ class Jaspi:
         self.profile = yaml.safe_load(open(profile,'r'))
         self.teller.say("Bonjour, je suis %s, ravis de vous revoir" % CONFIG.botname)
         self.brain = brain.Brain(self.teller, self.mic, self.profile)
-        self.notifier = notifier.Notifier(self.profile)
+        self.notifier = notifier.NotifierHandler(mic, teller, profile, CONFIG.modules)
+        self.notifier.start()
         self.state = 0
         logging.warn("Bot started ...")
 
@@ -27,7 +28,15 @@ class Jaspi:
             logging.warn("While loop running ...")
             try:
                 logging.warn("state %i" % self.state)
-                if self.state == 0:
+                if self.state == -1:
+                    notif, module = self.notifier.check()
+                    if module is not None:
+                        self.notifier.action(module)
+                        logging.warn('Got notification : %s' % notif)
+                    else:
+                        self.state = 0
+
+                elif self.state == 0:
                     th, trans = self.mic.passiveListen(CONFIG.botname)
                     if trans==CONFIG.botname:
                         logging.warn('Detected botname:')
@@ -36,9 +45,10 @@ class Jaspi:
                         logging.warn('going to state 1')
                     elif th==False:
                         logging.warn('Detected False:')
+                        self.state = -1
                     else:
                         logging.warn('detected : %s' % th)
-                        continue
+                        self.state = -1
 
                 elif self.state == 1:
                     detection = self.mic.activeListen()
@@ -48,10 +58,11 @@ class Jaspi:
                     if not done:
                         self.teller.say("Je n ai pas compris.")
                         logging.warn('Pas compris ...')
-                    self.state = 0
+                    self.state = -1
                 
             except KeyboardInterrupt:
                 logging.warn("Terminating ...")
+                self.notifier.not_thread.stop()
                 break
             
 

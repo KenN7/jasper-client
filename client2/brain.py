@@ -1,7 +1,7 @@
 #!/bin/python
 
 import logging
-from modules import *
+from client2.modules import *
 
 class Brain(object):
 

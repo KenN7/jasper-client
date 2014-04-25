@@ -9,7 +9,7 @@ from wave import open as open_audio
 import audioop
 import pyaudio
 import logging
-import CONFIG
+import client2.CONFIG
 
 
 class Mic:
