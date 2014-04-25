@@ -4,15 +4,15 @@ import yaml
 import sys
 import logging, logging.handlers
 
-import client2.mic
-import client2.say
-import client2.brain
+from client2 import mic
+from client2 import say
+from client2 import brain
 from client2.notifiersMod import notifier
 
-import client2.CONFIG
+from client2 import CONFIG
 
 class Jaspi:
-    def __init__(self, lm, dic, perso_lm, perso_dic, profile, mic, teller):
+    def __init__(self, profile, mic, teller):
         self.mic = mic    
         self.teller = teller
         self.profile = yaml.safe_load(open(profile,'r'))
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     logging.warn("Forked from Jasper by Shubhro Saha & Charlie Marsh")
     logging.warn("-------------------------------")
     
-    mic_ = mic.Mic(CONFIG.lm, CONFIG.dic, CONFIG.perso_lm, CONFIG.perso_dic)    
+    mic_ = mic.Mic(CONFIG.lm, CONFIG.dic, CONFIG.perso_lm, CONFIG.perso_dic, CONFIG.hmdir)    
     teller = say.Speak() 
-    Jaspi = Jaspi(CONFIG.lm, CONFIG.dic, CONFIG.perso_lm, CONFIG.perso_dic, CONFIG.profile, mic_, teller)
+    Jaspi = Jaspi(CONFIG.profile, mic_, teller)
     Jaspi.run()

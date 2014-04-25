@@ -9,11 +9,11 @@ from wave import open as open_audio
 import audioop
 import pyaudio
 import logging
-import client2.CONFIG
+from client2 import CONFIG
 
 
 class Mic:
-    def __init__(self, lmd, dictd, lmd_persona, dictd_persona):
+    def __init__(self, lmd, dictd, lmd_persona, dictd_persona, hmdir):
             """
                 Initiates the pocketsphinx instance.
     
@@ -23,7 +23,7 @@ class Mic:
                 lmd_persona -- filename of the 'Persona' language model(e.g., 'Jasper')
                 dictd_persona -- filename of the 'Persona' dictionary (.dic)
             """
-            self.hmdir = "lmdict/lium_french_f0"
+            self.hmdir = hmdir
             self.lmd = lmd
             self.dictd = dictd
             self.lmd_persona = lmd_persona
