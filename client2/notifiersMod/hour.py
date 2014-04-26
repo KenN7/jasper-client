@@ -1,6 +1,6 @@
 import logging
 import time
-from client2.notifiersMod.notifier import NotifierModule
+from client2.notifier import NotifierModule
 
 class Hour(NotifierModule):
     def notif_check(self):

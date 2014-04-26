@@ -10,4 +10,5 @@ perso_lm = "client2/lmdict/perso.arpa"
 perso_dic = "client2/lmdict/perso.dict"
 hmdir = "client2/lmdict/lium_french_f0"
 profile = "client2/profile.yml"
-modules = ['Hour']
+notif_modules = ['hour']
+modules = ['time']

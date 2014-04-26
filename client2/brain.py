@@ -1,11 +1,11 @@
 #!/bin/python
 
 import logging
-from client2.modules import *
+import client2.modules
 
 class Brain(object):
 
-    def __init__(self, teller, mic, profile):
+    def __init__(self, teller, mic, profile, modules):
         """
         Instantiates a new Brain object, which cross-references user
         input with a list of modules. Note that the order of brain.modules
@@ -19,8 +19,21 @@ class Brain(object):
         self.mic = mic
         self.profile = profile
         self.teller = teller
-        self.modules = [
-            Gmail, Notifications, Birthday, Weather, HN, News, Time, Joke, Life]
+        self.modules_names = modules
+        self.modules = []
+        self.start_modules()
+
+    def add_mod(self, mod):
+        try:
+            mod = getattr(client2.modules,mod)(self.mic, self.teller, self.profile)
+            return mod
+        except Exception as e:
+            logging.warn('Problem %s with module %s' % (e,mod))
+
+    def start_modules(self):
+        for module in self.modules_names:
+            logging.warn('appening module %s' % module)
+            self.modules.append(self.add_mod(module))
 
     def query(self, text):
         """
@@ -45,3 +58,20 @@ class Brain(object):
             else:
                 continue
         return False
+
+
+
+class ConversationModule(object):
+    def __init__(self, mic, teller, profile):
+        self.WORDS = []
+        self.mic = mic
+        self.teller = teller
+        self.profile = profile
+        
+    def handle(self, text):
+        logger.warn('Not yet implemented')
+        
+    def isValid(self, text):
+        logger.warn('Not yet implemented')
+        return False
+

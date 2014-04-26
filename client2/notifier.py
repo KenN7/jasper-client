@@ -2,7 +2,7 @@ import Queue
 import logging
 import threading
 import time
-import client2.notifiersMod.hour
+import client2.notifiersMod
 
 class NotifierHandler:
     def __init__(self, mic, teller, profile, modules_names):
@@ -41,12 +41,12 @@ class NotifierThread(threading.Thread):
         
     def add_mod(self, mod):
         try:
-            mod = getattr('client2.notifiersMod',mod)(self.mic, self.teller, self.profile)
+            mod = getattr(client2.notifiersMod,mod)(self.mic, self.teller, self.profile)
             #mod = eval("hour.%s(self.mic, self.teller, self.profile)" % mod)
+            return mod
 
         except Exception as e:
             logging.warn("Problem %s starting module %s" % (e,mod))
-        return mod
         
     def start_modules(self):
         for module in self.modules_names:

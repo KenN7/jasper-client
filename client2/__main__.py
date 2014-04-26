@@ -7,7 +7,7 @@ import logging, logging.handlers
 from client2 import mic
 from client2 import say
 from client2 import brain
-from client2.notifiersMod import notifier
+from client2 import notifier
 
 from client2 import CONFIG
 
@@ -17,8 +17,8 @@ class Jaspi:
         self.teller = teller
         self.profile = yaml.safe_load(open(profile,'r'))
         self.teller.say("Bonjour, je suis %s, ravis de vous revoir" % CONFIG.botname)
-        self.brain = brain.Brain(self.teller, self.mic, self.profile)
-        self.notifier = notifier.NotifierHandler(mic, teller, profile, CONFIG.modules)
+        self.brain = brain.Brain(self.teller, self.mic, self.profile, CONFIG.modules)
+        self.notifier = notifier.NotifierHandler(mic, teller, profile, CONFIG.notif_modules)
         self.notifier.start()
         self.state = 0
         logging.warn("Bot started ...")
