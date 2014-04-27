@@ -59,19 +59,3 @@ class Brain(object):
                 continue
         return False
 
-
-
-class ConversationModule(object):
-    def __init__(self, mic, teller, profile):
-        self.WORDS = []
-        self.mic = mic
-        self.teller = teller
-        self.profile = profile
-        
-    def handle(self, text):
-        logger.warn('Not yet implemented')
-        
-    def isValid(self, text):
-        logger.warn('Not yet implemented')
-        return False
-

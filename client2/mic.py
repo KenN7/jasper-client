@@ -175,7 +175,7 @@ class Mic:
         if THRESHOLD == None:
             THRESHOLD = self.fetchThreshold()
 
-        os.system("aplay beep_hi.wav")
+        os.system("aplay client2/beep_hi.wav")
 
         # prepare recording stream
         audio = pyaudio.PyAudio()
@@ -205,7 +205,7 @@ class Mic:
             if average < THRESHOLD * 0.8:
                 break
 
-        os.system("aplay beep_lo.wav")
+        os.system("aplay client2/beep_lo.wav")
 
         # save the audio data
         stream.stop_stream()

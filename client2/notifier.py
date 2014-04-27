@@ -65,45 +65,17 @@ class NotifierThread(threading.Thread):
                     
                 except Exception as e:
                     logging.warn('Problem %s with module %s' % (e,module))
-            time.sleep(60)
+            
+            for i in xrange(60):
+                if self.term:
+                    break
+                else:
+                    time.sleep(1)
+
                     
     def stop(self):
         self.term = True
             
-
-class NotifierModule(object):
-    def __init__(self, mic, teller, profile):
-        self.term = False
-        self.mic = mic
-        self.teller = teller
-        self.profile = profile
-        self.last_time = None
-                
-    def notif_check(self):
-        logging.warn("Not yet implemented")
-        new_time = None
-        self.last_time = new_time
-        result = None
-        return result
-
-    def handle(self):
-        logging.warn("Not yet implemented")
-
-        
-#class a(NotifierModule):
-#    def __init__(self, mic, teller, profile):
-#        super(a, self).__init__(mic, teller, profile)
-#
-#    def notif_check(self):
-#        new_time = 0
-#        self.last_time = 0
-#        result = 20
-#        time.sleep(5)
-#        return result
-#
-#    def handle(self):
-#        logging.warn("Not yet implemented")
-
 
 #just import this, instant NotifierHandler, start the thread and check 
 #the submodules with check() method

@@ -2,14 +2,14 @@ import datetime
 import re
 from app_utils import getTimezone
 from semantic.dates import DateService
-from client2.brain import ConversationModule
+from client2.modules_classes import ConversationModule
 
 class Time(ConversationModule):
     def __init__(self, mic, teller, profile):
         super(Time, self).__init__(mic, teller, profile)
         self.WORDS = ['heure']
 
-    def handle(text, teller, mic, profile):
+    def handle(self, text, teller, mic, profile):
         """
             Reports the current time based on the user's timezone.
 
@@ -26,7 +26,7 @@ class Time(ConversationModule):
         teller.say("Il est %s." % response)
 
 
-    def isValid(text):
+    def isValid(self, text):
         """
             Returns True if input is related to the time.
 
